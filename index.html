@@ -3,39 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tez Kino Bot - Video Yuklab Olish</title>
+    <title>Tez Kino Bot</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f0f23 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border-radius: 24px; padding: 40px; max-width: 520px; width: 100%; border: 1px solid rgba(168, 85, 247, 0.3); box-shadow: 0 0 60px rgba(168, 85, 247, 0.15); }
-        .logo { text-align: center; margin-bottom: 30px; }
-        .logo h1 { color: #fff; font-size: 2.2em; margin-bottom: 8px; background: linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo p { color: #a1a1aa; font-size: 1em; }
-        .platforms { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
-        .platform { background: rgba(255, 255, 255, 0.08); padding: 12px 20px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: #fff; font-weight: 500; }
-        .feature { background: rgba(255, 255, 255, 0.05); padding: 14px 18px; border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 14px; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .feature:hover { background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); }
-        .feature-icon { font-size: 1.4em; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #a855f7, #ec4899); border-radius: 10px; }
-        .feature-text { color: #fff; }
-        .feature-text strong { display: block; margin-bottom: 3px; }
-        .feature-text span { color: #a1a1aa; font-size: 0.85em; }
-        .price { text-align: center; margin: 25px 0; padding: 20px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2)); border-radius: 16px; border: 1px solid rgba(168, 85, 247, 0.3); }
-        .price-label { color: #a1a1aa; font-size: 0.9em; margin-bottom: 5px; }
-        .price-amount { color: #fff; font-size: 2.5em; font-weight: bold; background: linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .payment-methods { display: flex; justify-content: center; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .payment-badge { background: rgba(255, 255, 255, 0.1); padding: 6px 12px; border-radius: 20px; color: #fff; font-size: 0.8em; }
-        .btn { display: block; width: 100%; padding: 16px; background: linear-gradient(90deg, #a855f7, #ec4899); color: #fff; border: none; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.3s; text-decoration: none; text-align: center; margin-top: 20px; box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5); }
-        .languages { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-        .languages p { color: #a1a1aa; margin-bottom: 12px; }
-        .lang-list { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .lang-item { background: rgba(255, 255, 255, 0.08); padding: 6px 12px; border-radius: 20px; color: #fff; font-size: 0.8em; }
-        footer { text-align: center; margin-top: 25px; color: #52525b; font-size: 0.8em; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: white; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; color: #ffd700; margin-bottom: 5px; }
+        .header p { opacity: 0.8; font-size: 14px; }
+        .search-box { background: rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; margin-bottom: 20px; }
+        .search-box input { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9); outline: none; }
+        .search-box button { width: 100%; margin-top: 10px; padding: 15px; background: linear-gradient(90deg, #ff6b6b, #feca57); border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .platforms { display: flex; gap: 10px; margin-bottom: 20px; }
+        .platform-btn { flex: 1; padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-size: 24px; transition: transform 0.2s; }
+        .platform-btn:hover { transform: scale(1.05); }
+        .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .youtube { background: #ff0000; }
+        .tiktok { background: #000; border: 1px solid #fff; }
+        .results { margin-top: 20px; }
+        .movie-card { background: rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; gap: 15px; }
+        .movie-info { flex: 1; }
+        .movie-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+        .movie-year { opacity: 0.7; font-size: 14px; margin-bottom: 10px; }
+        .download-btn { padding: 8px 20px; background: #4ecca3; border: none; border-radius: 8px; color: #1a1a2e; font-weight: bold; cursor: pointer; }
+        .loading { text-align: center; padding: 40px; display: none; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: #ffd700; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>⚡ Tez Kino Bot</h1>
-            <p>Har qanday video bir zumda sizda!</p>
-        <…
+    <div class="header"><h1>⚡ Tez Kino Bot</h1><p>Har qanday video bir zumda sizda!</p></div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Kino nomini kiriting..."><button onclick="searchMovies()">🔍 Qidirish</button></div>
+    <div class="platforms">
+        <button class="platform-btn instagram" onclick="selectPlatform('instagram')">📷</button>
+        <button class="platform-btn youtube" onclick="selectPlatform('youtube')">▶️</button>
+        <button class="platform-btn tiktok" onclick="selectPlatform('tiktok')">🎵</button>
+    </div>
+    <div class="loading" id="loading"><div class="spinner"></div><p>Qidirilmoqda...</p></div>
+    <div class="results" id="results"></div>
+    <script>
+        const tg = Telegram.WebApp;
+        tg.expand();
+        let selectedPlatform = '';
+        function selectPlatform(platform) {
+            selectedPlatform = platform;
+            document.getElementById('searchInput').placeholder = platform + ' linkini yuboring...';
+            document.getElementById('searchInput').focus();
+        }
+        async function searchMovies() {
+            const query = document.getElementById('searchInput').value;
+            if (!query) return;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+            const demoMovies = [{title:'Avatar',year:'2009',rating:'8.4'},{title:'Spider-Man',year:'2021',rating:'8.7'},{title:'Batman',year:'2022',rating:'8.0'}];
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                demoMovies.forEach(m => {
+                    document.getElementById('results').innerHTML += '<div class="movie-card"><div style="width:80px;height:120px;background:#333;border-radius:10px;display:flex;align-items:center;justify-content:center;">🎬</div><div class="movie-info"><div class="movie-title">'+m.title+'</div><div class="movie-year">'+m.year+' • ⭐ '+m.rating+'</div><button class="download-btn" onclick="downloadMovie('')'+m.title+''')">⬇️ Yuklash</button></div></div>';
+                });
+            }, 1500);
+        }
+        function downloadMovie(title) { tg.showAlert('📥 Yuklanmoqda: ' + title); }
+    </script>
+</body>
+</html>

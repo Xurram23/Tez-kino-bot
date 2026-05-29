@@ -3,181 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Downloader</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Tez Kino & Downloader Mini App</title>
+    <script src="https://telegram.org"></script>
+    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(180deg, #1e3a5f 0%, #0d1b2a 100%);
-            min-height: 100vh;
-            color: white;
-            padding: 20px;
+        :root {
+            --bg-color: #1c1c1e;
+            --card-bg: #2c2c2e;
+            --accent-color: #007aff;
+            --text-color: #ffffff;
+            --text-muted: #8e8e93;
         }
-        .container { max-width: 400px; margin: 0 auto; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+        }
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+        }
+        .header i {
+            font-size: 50px;
+            color: var(--accent-color);
+            background: rgba(0, 122, 255, 0.1);
+            padding: 20px;
+            border-radius: 50%;
+            margin-bottom: 10px;
         }
         .header h1 {
             font-size: 24px;
-            margin-bottom: 8px;
+            margin: 10px 0 5px 0;
         }
         .header p {
-            opacity: 0.7;
-            font-size: 13px;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
         }
         .input-group {
-            background: white;
+            background-color: var(--card-bg);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid #3a3a3c;
         }
-        .input-group label {
-            display: block;
-            color: #333;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .input-group i {
+            color: var(--text-muted);
+            margin-right: 10px;
         }
         .input-group input {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 16px;
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 12px 0;
             outline: none;
         }
-        .input-group input:focus {
-            border-color: #4a90d9;
-        }
-        .platforms {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .platform-btn {
-            flex: 1;
-            padding: 16px 10px;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
+        .section-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-left: 5px;
             font-weight: 600;
-            text-align: center;
-            transition: all 0.2s;
-            color: white;
         }
-        .platform-btn:hover { transform: translateY(-2px); }
-        .platform-btn.active { border-color: white; transform: scale(1.05); }
-        .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-        .youtube { background: #ff0000; }
-        .tiktok { background: #000; }
-
-        .download-btn {
-            width: 100%;
-            padding: 18px;
-            background: #4a90d9;
-            border: none;
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .platform-card {
+            background-color: var(--card-bg);
             border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #3a3a3c;
+            transition: all 0.2s;
+        }
+        .platform-card:hover {
+            border-color: var(--accent-color);
+        }
+        .platform-card i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .instagram i { color: #e1306c; }
+        .youtube i { color: #ff0000; }
+        .tiktok i { color: #ffffff; }
+        .movie i { color: #ffcc00; }
+        .platform-card span {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .btn-download {
+            background-color: var(--accent-color);
             color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
         }
-        .download-btn:hover { background: #357abd; }
-        .download-btn:disabled { background: #666; cursor: not-allowed; }
-
-        .privacy {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 11px;
-            opacity: 0.6;
-        }
-
-        .success-msg {
-            display: none;
-            background: #4ecca3;
-            color: #1a1a2e;
-            padding: 15px;
+        .privacy-note {
+            background-color: rgba(44, 44, 46, 0.5);
             border-radius: 12px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 600;
+            padding: 15px;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: start;
+            border: 1px dashed #3a3a3c;
+        }
+        .privacy-note i {
+            color: #34c759;
+            font-size: 20px;
+        }
+        .privacy-note div h4 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        .privacy-note div p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <div class="app-container">
         <div class="header">
-            <h1>📥 Video Downloader</h1>
-            <p>Instagram, YouTube va TikTok videolarini yuklab oling</p>
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+            <h1>Tez Kino & Downloader</h1>
+            <p>Kino qidiring yoki ijtimoiy tarmoq havolasini joylang</p>
         </div>
 
-        <div class="success-msg" id="successMsg">✅ So'rov qabul qilindi! Tez orada bot javob beradi.</div>
-
+        <div class="section-title">Qidiruv / Havola</div>
         <div class="input-group">
-            <label>Video URL ni joylashtiring</label>
-            <input type="url" id="videoUrl" placeholder="https://instagram.com/reel/..." required>
+            <i class="fa-solid fa-link" id="input-icon"></i>
+            <input type="text" id="userInput" placeholder="Kino nomi yoki video havolasi...">
         </div>
 
-        <label style="display:block;margin-bottom:10px;font-size:13px;opacity:0.8;">Platformani tanlang:</label>
-        <div class="platforms">
-            <button class="platform-btn instagram" onclick="selectPlatform('instagram', this)">📷 Instagram</button>
-            <button class="platform-btn youtube" onclick="selectPlatform('youtube', this)">▶️ YouTube</button>
-            <button class="platform-btn tiktok" onclick="selectPlatform('tiktok', this)">🎵 TikTok</button>
+        <div class="section-title">Turini tanlang</div>
+        <div class="platform-grid">
+            <div class="platform-card movie" onclick="selectType('Kino')">
+                <i class="fa-solid fa-film"></i>
+                <span>Kino Qidirish</span>
+            </div>
+            <div class="platform-card instagram" onclick="selectType('Instagram')">
+                <i class="fa-brands fa-instagram"></i>
+                <span>Instagram</span>
+            </div>
+            <div class="platform-card youtube" onclick="selectType('YouTube')">
+                <i class="fa-brands fa-youtube"></i>
+                <span>YouTube</span>
+            </div>
         </div>
 
-        <button class="download-btn" id="downloadBtn" onclick="downloadVideo()">⬇️ Yuklash</button>
+        <button class="btn-download" onclick="sendDataToBot()">
+            <i class="fa-solid fa-magnifying-glass"></i> Tezda Topish / Yuklash
+        </button>
 
-        <div class="privacy">
-            🔒 Biz sizning maxfiyligingizga hurmat qilamiz. Hech qanday video yoki shaxsiy ma'lumotlarni saqlamaymiz. Yuklab olishlaringiz xavfsiz va maxfiy.
+        <div class="privacy-note">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h4>Xavfsiz va Premium Xizmat</h4>
+                <p>Oylik obuna bor-yo'g'i 5000 so'm. Istalgan turdagi kino va videolarni maksimal tezlikda yuklab oling.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        const tg = Telegram.WebApp;
-        tg.expand();
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Oynani to'liq yoyish
 
-        let selectedPlatform = '';
+        let selectedType = "Kino";
 
-        function selectPlatform(platform, btn) {
-            selectedPlatform = platform;
-            document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function selectType(type) {
+            selectedType = type;
+            const icon = document.getElementById('input-icon');
+            const input = document.getElementById('userInput');
+            
+            // Kartalarni vizual ajratish
+            document.querySelectorAll('.platform-card').forEach(c => c.style.borderColor = '#3a3a3c');
+            event.currentTarget.style.borderColor = '#007aff';
+
+            if(type === 'Kino') {
+                icon.className = "fa-solid fa-film";
+                input.placeholder = "Kino nomini yoki tavsifini yozing...";
+            } else {
+                icon.className = "fa-solid fa-link";
+                input.placeholder = type + " video havolasini (link) joylang...";
+            }
         }
 
-        function downloadVideo() {
-            const url = document.getElementById('videoUrl').value.trim();
-            const btn = document.getElementById('downloadBtn');
-
-            if (!url) {
-                tg.showAlert('Iltimos, video URL kiriting!');
+        function sendDataToBot() {
+            const query = document.getElementById('userInput').value.trim();
+            if (!query) {
+                tg.showAlert("Iltimos, matn yoki havola kiriting!");
                 return;
             }
 
-            if (!selectedPlatform) {
-                tg.showAlert('Iltimos, platformani tanlang!');
-                return;
-            }
-
-            // URL ni botga yuborish
-            const data = {
-                type: 'download',
-                platform: selectedPlatform,
-                url: url
+            // Ma'lumotni JSON formatida botga yuboramiz
+            const dataToSend = {
+                type: selectedType,
+                text: query
             };
 
-            tg.sendData(JSON.stringify(data));
-
-            // Foydalanuvchiga xabar
-            document.getElementById('successMsg').style.display = 'block';
-            document.getElementById('videoUrl').value = '';
-            document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
-            selectedPlatform = '';
-
-            tg.showAlert('📥 Yuklanmoqda! Tez orada videoni olasiz.');
+            tg.sendData(JSON.stringify(dataToSend));
+            tg.close();
         }
     </script>
 </body>

@@ -17,7 +17,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # Bot token - @BotFather dan oling
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+BOT_TOKEN = "8792524568:AAHJ0fLRJoAuTdG9g8_LB8TE9sCMXh1E1aU"
 
 # Mini-app URL
 WEBAPP_URL = "https://xurram23.github.io/Tez-kino-bot/"
@@ -120,9 +120,7 @@ async def download_video(url: str, platform: str) -> str:
                 return filename
 
         # Instagram/TikTok uchun (simple approach)
-        # E'tibor bering: bu ishlamashi mumkin, real deployda API kerak
         else:
-            # Vaqtinchalik - foydalanuvchiga xabar
             return None
 
     except Exception as e:
